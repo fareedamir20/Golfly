@@ -236,59 +236,71 @@ export const DashboardView: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Golfer Status Banner */}
       {user ? (
-        <div className="bg-emerald-900 text-white rounded-3xl p-6 sm:p-8 shadow-sm border border-emerald-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            {user.avatarUrl ? (
-              <img
-                src={user.avatarUrl}
-                alt={user.fullName}
-                className="w-16 h-16 rounded-2xl object-cover border-2 border-emerald-400 shrink-0"
-              />
-            ) : (
-              <div className="w-16 h-16 rounded-2xl bg-slate-950 text-emerald-400 font-black text-lg flex items-center justify-center border-2 border-emerald-400 shrink-0">
-                {user.fullName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)}
-              </div>
-            )}
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-black text-white">
-                  Welcome back, {user.fullName}
-                </h1>
-                <span className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-emerald-800 text-emerald-200 border border-emerald-700">
-                  Verified Golfer
-                </span>
-              </div>
-              <p className="text-xs text-emerald-200 mt-0.5">
-                Home Club: <span className="font-semibold text-white">{user.homeClub}</span> · Official Handicap: <span className="font-bold text-white">{user.handicap}</span>
-              </p>
-              <p className="text-[11px] text-emerald-300 mt-1 max-w-xl">
-                {user.preferredTimeSlot || "Morning Preferred"}
-              </p>
-            </div>
-          </div>
+        <div className="relative rounded-3xl p-6 sm:p-8 shadow-xl overflow-hidden border border-emerald-500/50 text-white">
+          {/* Lush Background Image */}
+          <img
+            src="/lush_fairway_sunset.jpg"
+            alt="Lush Golf Course Background"
+            className="absolute inset-0 w-full h-full object-cover filter saturate-[1.3] brightness-[1.05]"
+            referrerPolicy="no-referrer"
+          />
+          {/* Multi-layered Lush Bright Emerald Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/88 via-teal-900/80 to-emerald-900/85 backdrop-blur-[1px]" />
 
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-            <button
-              onClick={() => setShowTeammateSearchModal(true)}
-              className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer shadow-md active:scale-95"
-            >
-              <Sparkles className="w-4 h-4 text-slate-950" />
-              <span>⚡ Find Teammate</span>
-            </button>
-            <button
-              onClick={() => navigate("/partners")}
-              className="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
-            >
-              <Users className="w-4 h-4" />
-              <span>All Partners</span>
-            </button>
-            <button
-              onClick={() => setShowAddRoundModal(true)}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-bold text-xs uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Post Score</span>
-            </button>
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              {user.avatarUrl ? (
+                <img
+                  src={user.avatarUrl}
+                  alt={user.fullName}
+                  className="w-16 h-16 rounded-2xl object-cover border-2 border-emerald-300 shrink-0 shadow-lg"
+                />
+              ) : (
+                <div className="w-16 h-16 rounded-2xl bg-emerald-900 text-emerald-200 font-black text-lg flex items-center justify-center border-2 border-emerald-300 shrink-0 shadow-lg">
+                  {user.fullName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)}
+                </div>
+              )}
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl sm:text-2xl font-black text-white drop-shadow-xs">
+                    Welcome back, {user.fullName}
+                  </h1>
+                  <span className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-emerald-400/30 text-emerald-200 border border-emerald-300/40 backdrop-blur-md">
+                    Verified Golfer
+                  </span>
+                </div>
+                <p className="text-xs text-slate-100 mt-1 font-medium">
+                  Home Club: <span className="font-bold text-white">{user.homeClub}</span> · Official Handicap: <span className="font-black text-amber-300">{user.handicap}</span>
+                </p>
+                <p className="text-[11px] text-emerald-200/90 mt-1 max-w-xl font-medium">
+                  {user.preferredTimeSlot || "Morning Preferred"}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+              <button
+                onClick={() => setShowTeammateSearchModal(true)}
+                className="px-5 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-xl hover:shadow-emerald-500/30 active:scale-95"
+              >
+                <Sparkles className="w-4 h-4 text-slate-950" />
+                <span>⚡ Find Teammate</span>
+              </button>
+              <button
+                onClick={() => navigate("/partners")}
+                className="px-4 py-3 rounded-2xl bg-white/95 hover:bg-white text-emerald-950 font-bold text-xs uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer shadow-md"
+              >
+                <Users className="w-4 h-4 text-emerald-700" />
+                <span>Explore Network</span>
+              </button>
+              <button
+                onClick={() => setShowAddRoundModal(true)}
+                className="px-4 py-3 rounded-2xl bg-emerald-950/80 hover:bg-emerald-900 text-emerald-100 border border-emerald-500/40 font-bold text-xs uppercase tracking-wider transition-colors flex items-center gap-1.5 cursor-pointer shadow-md"
+              >
+                <Plus className="w-4 h-4 text-emerald-300" />
+                <span>Post Score</span>
+              </button>
+            </div>
           </div>
         </div>
       ) : (

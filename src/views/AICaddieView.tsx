@@ -111,24 +111,37 @@ export const AICaddieView: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-6">
-        <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-100 text-teal-900 text-xs font-bold uppercase tracking-wider mb-2">
-            <Bot className="w-3.5 h-3.5 text-teal-700" />
-            <span>Course Caddie & Tactical Strategy</span>
-          </div>
-          <h1 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">
-            Lahore Course Caddie & Shot Calculator
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl">
-            Real-time shot strategy taking into account Lahore's winter smog air-density, course architecture, and fairway conditions.
-          </p>
-        </div>
+      {/* Header Visual Banner */}
+      <div className="relative rounded-3xl p-6 sm:p-8 shadow-xl overflow-hidden border border-emerald-500/50 text-white">
+        <img
+          src="/golf_caddie_strategy.jpg"
+          alt="Golf Caddie Strategy on Fairway"
+          className="absolute inset-0 w-full h-full object-cover filter saturate-[1.3] brightness-[1.05]"
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/88 via-teal-900/80 to-emerald-900/85 backdrop-blur-[1px]" />
 
-        <div className="bg-teal-50 border border-teal-200 rounded-xl p-3 px-4 text-xs">
-          <span className="font-bold text-teal-950 block">Course Radar Active</span>
-          <span className="text-teal-800">Air density & wind compensated</span>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-400/30 text-emerald-200 text-xs font-bold uppercase tracking-wider border border-emerald-300/40 backdrop-blur-md">
+              <Bot className="w-3.5 h-3.5 text-emerald-200" />
+              <span>AI Caddie & Atmospheric Telemetry</span>
+            </div>
+            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight drop-shadow-xs">
+              Lahore Course Caddie & Shot Calculator
+            </h1>
+            <p className="text-xs sm:text-sm text-emerald-100/90 max-w-2xl font-medium">
+              Real-time shot strategy taking into account Lahore's winter smog air-density, course architecture, and fairway wind vectors.
+            </p>
+          </div>
+
+          <div className="bg-emerald-950/80 border border-emerald-500/40 rounded-2xl p-3.5 px-4 text-xs backdrop-blur-md shadow-lg shrink-0">
+            <span className="font-extrabold text-emerald-200 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>Course Radar Active</span>
+            </span>
+            <span className="text-emerald-100/90 text-[11px] block mt-0.5 font-medium">Air density & wind compensated</span>
+          </div>
         </div>
       </div>
 

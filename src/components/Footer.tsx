@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, MapPin } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { GolflyLogo } from "./GolflyLogo";
 import { useApp } from "../context/AppContext";
 
@@ -37,10 +37,6 @@ export const Footer: React.FC = () => {
             <p className="text-xs text-slate-400 leading-relaxed mb-4">
               The modern player companion and course management platform. Track handicaps, analyze playing conditions, and discover competitive fixtures.
             </p>
-            <div className="flex items-center gap-2 text-xs text-emerald-400">
-              <MapPin className="w-4 h-4 shrink-0" />
-              <span>Lahore, Pakistan</span>
-            </div>
           </div>
 
           {/* Product */}
@@ -152,18 +148,18 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <div>
+        <div className="pt-8 border-t border-slate-800 flex flex-col items-center justify-center text-center text-xs text-slate-500 gap-3">
+          <div className="text-slate-400 font-medium">
             &copy; {new Date().getFullYear()} Golfly. All rights reserved.
           </div>
-          <div className="flex items-center gap-6">
-            <button onClick={() => navigate("/company/privacy")} className="hover:text-slate-300 transition-colors cursor-pointer">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-slate-400">
+            <button onClick={() => navigate("/company/privacy")} className="hover:text-emerald-300 transition-colors cursor-pointer">
               Privacy Policy
             </button>
-            <button onClick={() => navigate("/company/contact")} className="hover:text-slate-300 transition-colors cursor-pointer">
+            <button onClick={() => navigate("/company/contact")} className="hover:text-emerald-300 transition-colors cursor-pointer">
               Support
             </button>
-            <button onClick={() => navigate("/company/about")} className="hover:text-slate-300 transition-colors cursor-pointer">
+            <button onClick={() => navigate("/company/about")} className="hover:text-emerald-300 transition-colors cursor-pointer">
               About
             </button>
           </div>
