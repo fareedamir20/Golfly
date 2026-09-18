@@ -14,6 +14,7 @@ export interface ClubInfo {
   address?: string;
   email?: string;
   phone?: string;
+  website?: string;
   rating?: number;
   reviewCount?: number;
   holes: number;

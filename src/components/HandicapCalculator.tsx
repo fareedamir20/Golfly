@@ -57,7 +57,7 @@ const DEFAULT_TEES: TeeConfig[] = [
   { id: "standard", name: "Standard White Tees", rating: 72.0, slope: 125, par: 72, colorClass: "bg-slate-200 text-slate-800" }
 ];
 
-export const HandicapCalculator: React.FC = () => {
+export const HandicapCalculator: React.FC = React.memo(() => {
   const { user, rounds, updateUser } = useApp();
   const [activeTab, setActiveTab] = useState<"course" | "differential" | "whs">("course");
   const [isExpanded, setIsExpanded] = useState(true);
@@ -608,4 +608,4 @@ export const HandicapCalculator: React.FC = () => {
       )}
     </div>
   );
-};
+});

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import {
   Compass,
   Users,
@@ -18,8 +18,10 @@ import {
   LogIn,
   UserPlus,
   Calculator,
-  Radar
+  Radar,
+  X
 } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 import { useApp } from "../context/AppContext";
 import { WeatherWidget } from "../components/WeatherWidget";
 import { HandicapCalculator } from "../components/HandicapCalculator";
@@ -39,9 +41,12 @@ export const DashboardView: React.FC = () => {
 
   const [showAddRoundModal, setShowAddRoundModal] = useState(false);
   const [showTeammateSearchModal, setShowTeammateSearchModal] = useState(false);
+  const handleCloseTeammateModal = useCallback(() => {
+    setShowTeammateSearchModal(false);
+  }, []);
   const [featureCategory, setFeatureCategory] = useState<"all" | "caddie" | "play" | "stats">("all");
 
-  const [clubName, setClubName] = useState(user?.homeClub || "Pine Valley Country Club");
+  const [clubName, setClubName] = useState(user?.homeClub || "Defence Raya Golf & Country Club");
   const [score, setScore] = useState(79);
   const [par, setPar] = useState(72);
   const [fairways, setFairways] = useState(9);
@@ -74,8 +79,8 @@ export const DashboardView: React.FC = () => {
   const recentRounds = rounds.slice(0, 3);
   const userHonours = honours.slice(0, 4);
 
-  // All Platform Features
-  const allFeatures = [
+  // All Platform Features - Memoized to prevent object recreation on render
+  const allFeatures = useMemo(() => [
     {
       id: "teammate-search",
       title: "1-Click Teammate Search",
@@ -225,18 +230,25 @@ export const DashboardView: React.FC = () => {
       accentBorder: "hover:border-slate-500",
       category: "play"
     }
-  ];
+  ], [totalUnread, marketplace.length, userHonours.length, rounds.length, tournaments.length]);
 
-  const filteredFeatures = allFeatures.filter((f) => {
-    if (featureCategory === "all") return true;
-    return f.category === featureCategory;
-  });
+  const filteredFeatures = useMemo(() => {
+    return allFeatures.filter((f) => {
+      if (featureCategory === "all") return true;
+      return f.category === featureCategory;
+    });
+  }, [allFeatures, featureCategory]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Golfer Status Banner */}
       {user ? (
-        <div className="relative rounded-3xl p-6 sm:p-8 shadow-xl overflow-hidden border border-emerald-500/50 text-white">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="relative rounded-3xl p-6 sm:p-8 shadow-xl overflow-hidden border border-emerald-500/50 text-white"
+        >
           {/* Lush Background Image */}
           <img
             src="/lush_fairway_sunset.jpg"
@@ -302,9 +314,14 @@ export const DashboardView: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       ) : (
-        <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+        >
           <div className="space-y-2 max-w-xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-900/60 text-emerald-300 border border-emerald-800 text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
@@ -334,11 +351,15 @@ export const DashboardView: React.FC = () => {
               <span>Sign In</span>
             </button>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Atmospheric Radar & Weather Conditions */}
-      <div>
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+      >
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 flex items-center gap-1.5">
             <CloudFog className="w-4 h-4 text-slate-600" />
@@ -349,15 +370,25 @@ export const DashboardView: React.FC = () => {
           </span>
         </div>
         <WeatherWidget />
-      </div>
+      </motion.div>
 
       {/* Embedded In-Dashboard Handicap & Slope Calculator */}
-      <div id="handicap-calc-widget">
+      <motion.div
+        id="handicap-calc-widget"
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      >
         <HandicapCalculator />
-      </div>
+      </motion.div>
 
       {/* Features Hub & Module Switcher */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-6">
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+        className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs space-y-6"
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold mb-2">
@@ -375,90 +406,75 @@ export const DashboardView: React.FC = () => {
 
           {/* Category Filter Tabs */}
           <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-100 rounded-2xl border border-slate-200/80">
-            <button
-              onClick={() => setFeatureCategory("all")}
-              className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                featureCategory === "all"
-                  ? "bg-white text-emerald-900 shadow-xs border border-slate-200/60"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
-              }`}
-            >
-              All Features ({allFeatures.length})
-            </button>
-            <button
-              onClick={() => setFeatureCategory("caddie")}
-              className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                featureCategory === "caddie"
-                  ? "bg-white text-emerald-900 shadow-xs border border-slate-200/60"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
-              }`}
-            >
-              AI Caddie & Coach
-            </button>
-            <button
-              onClick={() => setFeatureCategory("play")}
-              className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                featureCategory === "play"
-                  ? "bg-white text-emerald-900 shadow-xs border border-slate-200/60"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
-              }`}
-            >
-              Match & Shop
-            </button>
-            <button
-              onClick={() => setFeatureCategory("stats")}
-              className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                featureCategory === "stats"
-                  ? "bg-white text-emerald-900 shadow-xs border border-slate-200/60"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
-              }`}
-            >
-              Scores & Calculator
-            </button>
+            {[
+              { id: "all", label: `All Features (${allFeatures.length})` },
+              { id: "caddie", label: "AI Caddie & Coach" },
+              { id: "play", label: "Match & Shop" },
+              { id: "stats", label: "Scores & Calculator" }
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setFeatureCategory(cat.id as any)}
+                className={`px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                  featureCategory === cat.id
+                    ? "bg-white text-emerald-900 shadow-xs border border-slate-200/60"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Feature Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredFeatures.map((feat: any) => {
-            const Icon = feat.icon;
-            return (
-              <div
-                key={feat.id}
-                onClick={() => {
-                  if (feat.onClick) {
-                    feat.onClick();
-                  } else {
-                    navigate(feat.path);
-                  }
-                }}
-                className={`bg-slate-50/70 hover:bg-white rounded-2xl border border-slate-200/80 p-5 shadow-2xs ${feat.accentBorder} hover:shadow-md transition-all cursor-pointer flex flex-col justify-between group`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className={`w-10 h-10 rounded-xl ${feat.iconBg} flex items-center justify-center shrink-0`}>
-                      <Icon className="w-5 h-5" />
+        {/* Feature Cards Grid with Animated Filter Transitions */}
+        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <AnimatePresence>
+            {filteredFeatures.map((feat: any) => {
+              const Icon = feat.icon;
+              return (
+                <motion.div
+                  key={feat.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => {
+                    if (feat.onClick) {
+                      feat.onClick();
+                    } else {
+                      navigate(feat.path);
+                    }
+                  }}
+                  className={`bg-slate-50/70 hover:bg-white rounded-2xl border border-slate-200/80 p-5 shadow-2xs ${feat.accentBorder} hover:shadow-md transition-all cursor-pointer flex flex-col justify-between group`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className={`w-10 h-10 rounded-xl ${feat.iconBg} flex items-center justify-center shrink-0`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${feat.badgeColor}`}>
+                        {feat.badgeText}
+                      </span>
                     </div>
-                    <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${feat.badgeColor}`}>
-                      {feat.badgeText}
-                    </span>
+                    <h3 className="font-bold text-sm text-slate-900 group-hover:text-emerald-800 transition-colors">
+                      {feat.title}
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                      {feat.desc}
+                    </p>
                   </div>
-                  <h3 className="font-bold text-sm text-slate-900 group-hover:text-emerald-800 transition-colors">
-                    {feat.title}
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">
-                    {feat.desc}
-                  </p>
-                </div>
-                <div className="pt-4 mt-3 border-t border-slate-200/60 flex items-center justify-between text-xs font-bold text-emerald-800">
-                  <span>{feat.onClick ? "Use In Dashboard" : "Launch Feature"}</span>
-                  <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+                  <div className="pt-4 mt-3 border-t border-slate-200/60 flex items-center justify-between text-xs font-bold text-emerald-800">
+                    <span>{feat.onClick ? "Use In Dashboard" : "Launch Feature"}</span>
+                    <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </motion.div>
+      </motion.div>
 
       {/* Main Grid: Recent Rounds & Upcoming Tournaments */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-2">
@@ -598,124 +614,135 @@ export const DashboardView: React.FC = () => {
         </div>
       </div>
 
-      {/* Post Score Modal */}
-      {showAddRoundModal && (
-        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="font-black text-base text-slate-900">Record Round</h3>
-              <button
-                onClick={() => setShowAddRoundModal(false)}
-                className="text-slate-400 hover:text-slate-600 font-bold cursor-pointer"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateRound} className="space-y-3">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Golf Course</label>
-                <input
-                  type="text"
-                  required
-                  value={clubName}
-                  onChange={(e) => setClubName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emerald-500 bg-white"
-                  placeholder="e.g. Pine Valley Golf Club"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Gross Score</label>
-                  <input
-                    type="number"
-                    required
-                    value={score}
-                    onChange={(e) => setScore(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Course Par</label>
-                  <input
-                    type="number"
-                    required
-                    value={par}
-                    onChange={(e) => setPar(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Fairways Hit</label>
-                  <input
-                    type="number"
-                    value={fairways}
-                    onChange={(e) => setFairways(Number(e.target.value))}
-                    className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Greens (GIR)</label>
-                  <input
-                    type="number"
-                    value={gir}
-                    onChange={(e) => setGir(Number(e.target.value))}
-                    className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1">Total Putts</label>
-                  <input
-                    type="number"
-                    value={putts}
-                    onChange={(e) => setPutts(Number(e.target.value))}
-                    className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Notes / Conditions</label>
-                <textarea
-                  rows={2}
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs"
-                  placeholder="e.g. Solid driver play, crisp morning conditions"
-                />
-              </div>
-
-              <div className="pt-2 flex items-center justify-end gap-2">
+      {/* Post Score Modal with Framer Motion */}
+      <AnimatePresence>
+        {showAddRoundModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4"
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <h3 className="font-black text-base text-slate-900">Record Round</h3>
                 <button
-                  type="button"
                   onClick={() => setShowAddRoundModal(false)}
-                  className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
+                  className="p-1 rounded-full text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
                 >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 text-xs font-bold uppercase tracking-wider bg-emerald-800 hover:bg-emerald-700 text-white rounded-xl shadow-xs cursor-pointer"
-                >
-                  Save Scorecard
+                  <X className="w-5 h-5" />
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+
+              <form onSubmit={handleCreateRound} className="space-y-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Golf Course</label>
+                  <input
+                    type="text"
+                    required
+                    value={clubName}
+                    onChange={(e) => setClubName(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-emerald-500 bg-white"
+                    placeholder="e.g. Defence Raya Golf & Country Club"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Gross Score</label>
+                    <input
+                      type="number"
+                      required
+                      value={score}
+                      onChange={(e) => setScore(Number(e.target.value))}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Course Par</label>
+                    <input
+                      type="number"
+                      required
+                      value={par}
+                      onChange={(e) => setPar(Number(e.target.value))}
+                      className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">Fairways Hit</label>
+                    <input
+                      type="number"
+                      value={fairways}
+                      onChange={(e) => setFairways(Number(e.target.value))}
+                      className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">Greens (GIR)</label>
+                    <input
+                      type="number"
+                      value={gir}
+                      onChange={(e) => setGir(Number(e.target.value))}
+                      className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">Total Putts</label>
+                    <input
+                      type="number"
+                      value={putts}
+                      onChange={(e) => setPutts(Number(e.target.value))}
+                      className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">Notes / Conditions</label>
+                  <textarea
+                    rows={2}
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs"
+                    placeholder="e.g. Solid driver play, crisp morning conditions"
+                  />
+                </div>
+
+                <div className="pt-2 flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddRoundModal(false)}
+                    className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 text-xs font-bold uppercase tracking-wider bg-emerald-800 hover:bg-emerald-700 text-white rounded-xl shadow-xs cursor-pointer"
+                  >
+                    Save Scorecard
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 1-Click Teammate Search Modal */}
       <TeammateSearchModal
         isOpen={showTeammateSearchModal}
-        onClose={() => setShowTeammateSearchModal(false)}
+        onClose={handleCloseTeammateModal}
       />
     </div>
   );
 };
-
-

@@ -321,6 +321,17 @@ export const ClubsView: React.FC = () => {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2">
+                      {club.website && (
+                        <a
+                          href={club.website}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-4 py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider transition-colors flex items-center gap-1.5 shadow-xs"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5 text-emerald-200" />
+                          <span>Official Website</span>
+                        </a>
+                      )}
                       {club.email && (
                         <a
                           href={`mailto:${club.email}`}

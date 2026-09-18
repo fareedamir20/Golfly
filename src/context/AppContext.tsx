@@ -111,71 +111,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) return parsed;
       } catch (e) { /* ignore */ }
     }
-    return [
-      {
-        id: "p1",
-        fullName: "Ahmad Yar Khan",
-        avatarUrl: "",
-        homeClub: "Defence Raya Golf & Country Club",
-        handicap: 4.2,
-        distanceKm: 2.5,
-        preferredTiming: "Early Morning (6:30 AM)",
-        availableDays: ["Saturday", "Sunday"],
-        playingStyle: "Competitive Matchplay",
-        bio: "Single digit golfer looking for fast-paced weekend four-ball games. Plays regularly at Defence Raya.",
-        compatibilityScore: 98,
-        pastRoundsTogether: 3,
-        recentActivity: "Logged 76 (+4) at Defence Raya yesterday"
-      },
-      {
-        id: "p2",
-        fullName: "Kamran Hassan",
-        avatarUrl: "",
-        homeClub: "Lahore Gymkhana Golf Club",
-        handicap: 9.8,
-        distanceKm: 4.1,
-        preferredTiming: "Afternoon (2:00 PM)",
-        availableDays: ["Friday", "Sunday"],
-        playingStyle: "Relaxed Social",
-        bio: "Historic Gymkhana member. Enjoys twilight rounds and post-game tea at the veranda.",
-        compatibilityScore: 94,
-        pastRoundsTogether: 1,
-        recentActivity: "Joined 4-Ball Tournament at Gymkhana"
-      },
-      {
-        id: "p3",
-        fullName: "Zainab Malik",
-        avatarUrl: "",
-        homeClub: "Royal Palm Golf & Country Club",
-        handicap: 11.5,
-        distanceKm: 5.8,
-        preferredTiming: "Morning (8:00 AM)",
-        availableDays: ["Saturday"],
-        playingStyle: "Steady & Tactical",
-        bio: "Royal Palm regular. Focused on short-game precision and fairway accuracy.",
-        compatibilityScore: 91,
-        pastRoundsTogether: 0,
-        recentActivity: "Updated handicap index to 11.5"
-      },
-      {
-        id: "p4",
-        fullName: "Bilal Chaudhry",
-        avatarUrl: "",
-        homeClub: "Lahore Garrison Golf Club",
-        handicap: 14.0,
-        distanceKm: 6.2,
-        preferredTiming: "Morning (7:30 AM)",
-        availableDays: ["Saturday", "Sunday"],
-        playingStyle: "Casual Weekend",
-        bio: "Garrison member enjoying friendly strokeplay and 18-hole weekend outings.",
-        compatibilityScore: 89,
-        pastRoundsTogether: 2,
-        recentActivity: "Logged 85 (+13) at Garrison Golf Club"
-      }
-    ];
+    return [];
   });
 
   const [friends, setFriends] = useState<string[]>(() => {

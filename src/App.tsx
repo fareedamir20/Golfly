@@ -1,40 +1,60 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense, lazy } from "react";
 import { AppProvider, useApp } from "./context/AppContext";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 
-// Public & Community Views
-import { LandingView } from "./views/LandingView";
-import { FeaturesView } from "./views/FeaturesView";
-import { ClubsView } from "./views/ClubsView";
-import { TournamentsView } from "./views/TournamentsView";
-import { FreePromiseView } from "./views/FreePromiseView";
+// Public & Community Views - Lazy Loaded
+const LandingView = lazy(() => import("./views/LandingView").then(m => ({ default: m.LandingView })));
+const FeaturesView = lazy(() => import("./views/FeaturesView").then(m => ({ default: m.FeaturesView })));
+const ClubsView = lazy(() => import("./views/ClubsView").then(m => ({ default: m.ClubsView })));
+const TournamentsView = lazy(() => import("./views/TournamentsView").then(m => ({ default: m.TournamentsView })));
+const FreePromiseView = lazy(() => import("./views/FreePromiseView").then(m => ({ default: m.FreePromiseView })));
 
-// Company Views
-import { AboutView } from "./views/company/AboutView";
-import { FounderView } from "./views/company/FounderView";
-import { SolutionView } from "./views/company/SolutionView";
-import { TermsView } from "./views/company/TermsView";
-import { PrivacyView } from "./views/company/PrivacyView";
-import { ContactView } from "./views/company/ContactView";
-import { TeamView } from "./views/company/TeamView";
+// Company Views - Lazy Loaded
+const AboutView = lazy(() => import("./views/company/AboutView").then(m => ({ default: m.AboutView })));
+const FounderView = lazy(() => import("./views/company/FounderView").then(m => ({ default: m.FounderView })));
+const SolutionView = lazy(() => import("./views/company/SolutionView").then(m => ({ default: m.SolutionView })));
+const TermsView = lazy(() => import("./views/company/TermsView").then(m => ({ default: m.TermsView })));
+const PrivacyView = lazy(() => import("./views/company/PrivacyView").then(m => ({ default: m.PrivacyView })));
+const ContactView = lazy(() => import("./views/company/ContactView").then(m => ({ default: m.ContactView })));
+const TeamView = lazy(() => import("./views/company/TeamView").then(m => ({ default: m.TeamView })));
 
-// Auth Views
-import { LoginView } from "./views/auth/LoginView";
-import { SignupView } from "./views/auth/SignupView";
-import { OnboardingView } from "./views/auth/OnboardingView";
+// Auth Views - Lazy Loaded
+const LoginView = lazy(() => import("./views/auth/LoginView").then(m => ({ default: m.LoginView })));
+const SignupView = lazy(() => import("./views/auth/SignupView").then(m => ({ default: m.SignupView })));
+const OnboardingView = lazy(() => import("./views/auth/OnboardingView").then(m => ({ default: m.OnboardingView })));
 
-// Authenticated Application Modules
-import { DashboardView } from "./views/DashboardView";
-import { PartnersView } from "./views/PartnersView";
-import { AICaddieView } from "./views/AICaddieView";
-import { AICoachView } from "./views/AICoachView";
-import { MarketplaceView } from "./views/MarketplaceView";
-import { HonoursView } from "./views/HonoursView";
-import { LeaderboardsView } from "./views/LeaderboardsView";
-import { MessagesView } from "./views/MessagesView";
-import { ProfileView } from "./views/ProfileView";
-import { RoundsView } from "./views/RoundsView";
+// Authenticated Application Modules - Lazy Loaded
+const DashboardView = lazy(() => import("./views/DashboardView").then(m => ({ default: m.DashboardView })));
+const PartnersView = lazy(() => import("./views/PartnersView").then(m => ({ default: m.PartnersView })));
+const AICaddieView = lazy(() => import("./views/AICaddieView").then(m => ({ default: m.AICaddieView })));
+const AICoachView = lazy(() => import("./views/AICoachView").then(m => ({ default: m.AICoachView })));
+const MarketplaceView = lazy(() => import("./views/MarketplaceView").then(m => ({ default: m.MarketplaceView })));
+const HonoursView = lazy(() => import("./views/HonoursView").then(m => ({ default: m.HonoursView })));
+const LeaderboardsView = lazy(() => import("./views/LeaderboardsView").then(m => ({ default: m.LeaderboardsView })));
+const MessagesView = lazy(() => import("./views/MessagesView").then(m => ({ default: m.MessagesView })));
+const ProfileView = lazy(() => import("./views/ProfileView").then(m => ({ default: m.ProfileView })));
+const RoundsView = lazy(() => import("./views/RoundsView").then(m => ({ default: m.RoundsView })));
+
+// Premium Golfly Suspense Loading Fallback
+const LoadingFallback: React.FC = () => (
+  <div className="min-h-[65vh] flex flex-col items-center justify-center p-8 space-y-4">
+    <div className="relative flex items-center justify-center">
+      <div className="w-14 h-14 rounded-2xl bg-emerald-950 border border-emerald-500/40 flex items-center justify-center shadow-lg">
+        <img src="/logo.png" alt="Golfly" className="w-10 h-10 object-contain animate-pulse" />
+      </div>
+      <div className="absolute -inset-2 rounded-3xl border border-emerald-400/30 animate-ping pointer-events-none" />
+    </div>
+    <div className="text-center space-y-1">
+      <p className="text-xs font-bold text-emerald-900 uppercase tracking-widest">
+        Golfly Intelligence
+      </p>
+      <p className="text-xs text-slate-500 font-medium">
+        Loading module...
+      </p>
+    </div>
+  </div>
+);
 
 const RouterContent: React.FC = () => {
   const { currentPath, isAuthenticated } = useApp();
@@ -121,7 +141,11 @@ const RouterContent: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans selection:bg-emerald-200 selection:text-emerald-950">
       <Navbar />
-      <main className="flex-1">{renderView()}</main>
+      <main className="flex-1">
+        <Suspense fallback={<LoadingFallback />}>
+          {renderView()}
+        </Suspense>
+      </main>
       <Footer />
     </div>
   );

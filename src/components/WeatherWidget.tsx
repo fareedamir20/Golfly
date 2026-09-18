@@ -23,7 +23,7 @@ interface WeatherData {
   }>;
 }
 
-export const WeatherWidget: React.FC<{ compact?: boolean; className?: string }> = ({
+export const WeatherWidget: React.FC<{ compact?: boolean; className?: string }> = React.memo(({
   compact = false,
   className = ""
 }) => {
@@ -244,4 +244,4 @@ export const WeatherWidget: React.FC<{ compact?: boolean; className?: string }> 
       </div>
     </div>
   );
-};
+});
