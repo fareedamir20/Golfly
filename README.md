@@ -1,4 +1,4 @@
-# ⛳ GolfConnect Lahore — Premium Golf & Country Club Ecosystem
+# ⛳ Golfly — Premium Golf & Country Club Ecosystem
 
 > **The definitive digital home for Lahore's elite golf community, connecting championship courses, avid golfers, member exchanges, and real-time tee-time matchmaking.**
 
@@ -30,7 +30,7 @@ GolfConnect Lahore delivers a seamless, high-performance web platform that centr
 ---
 
 ## 👨‍💻 Founder & Vision
-**Created & Architected by:** Fareed Amir (Lead Developer & Golf Enthusiast)  
+**Created & Architected by:** Fareed Amir (Lead Developer)  
 *Vision:* To elevate the South Asian amateur and championship golf experience through world-class software engineering, elegant minimalist design, and frictionless community connectivity.
 
 ---
