@@ -1,0 +1,6 @@
+{
+  "name": "Golfly",
+  "description": "The modern golf management and player companion platform. Seamlessly connect with partners, track tournament schedules, analyze course conditions, and trade gear.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
