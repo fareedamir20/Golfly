@@ -2,6 +2,7 @@ import React, { useEffect, Suspense, lazy } from "react";
 import { AppProvider, useApp } from "./context/AppContext";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
+import { Analytics } from "@vercel/analytics/react";
 
 // Public & Community Views - Lazy Loaded
 const LandingView = lazy(() => import("./views/LandingView").then(m => ({ default: m.LandingView })));
@@ -155,6 +156,7 @@ export default function App() {
   return (
     <AppProvider>
       <RouterContent />
+      <Analytics />
     </AppProvider>
   );
 }
